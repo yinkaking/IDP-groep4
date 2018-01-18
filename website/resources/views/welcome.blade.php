@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    {{\Illuminate\Foundation\Inspiring::quote()}}
                 </div>
 
                 <div class="links">
