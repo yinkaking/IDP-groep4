@@ -13,6 +13,9 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        // if(!auth()->user->isAdmin){
+        //     return Redirect::namedRoute();
+        // }
     }
 
     public function index()
@@ -35,6 +38,7 @@ class RegisterController extends Controller
         }
 
         $data["password"] = Hash::make($data["password"]);
+        $data["isAdmin"] = false;
         User::create($data);
         return redirect()->route("user.index")->with("message", "Succesvol gebruiker aangemaakt");
     }

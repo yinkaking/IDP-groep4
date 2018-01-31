@@ -24,6 +24,8 @@ Route::group(array('middleware' => ['web','auth']), function () {
 
 	Route::get("/control-panel", "admin\ControleController@index")->name("control.index");
 	Route::post("/control-panel/update", "admin\ControleController@updateWaterkering")->name("control.waterkering.ajax");
+	Route::post("/control-panel/status-doors", "admin\ControleController@getStatusDoors")->name("control.waterkering.getstatus");
+	Route::post("/control-panel/onderhoud", "admin\ControleController@onderhoud")->name("control.waterkering.onderhoud");
 });
 
 
@@ -45,5 +47,5 @@ Route::group(array("middleware"=>["web","guest"]), function(){
 });
 
 //Public routes
-Route::get("/status", "PublicController@index")->name("public.index");
+Route::get("/home", "PublicController@index")->name("public.index");
 Route::post("/status/update", "PublicController@store")->name("public.store");
