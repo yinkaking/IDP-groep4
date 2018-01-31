@@ -1,10 +1,12 @@
 import socket
 
+# import mysql.connector
+
 # cnx = mysql.connector.connect(user='root', password='', host='127.0.0.1', database='waterkering')
 
 # cursor = cnx.cursor()
 
-query = ("SELECT onderhoud, created_at FROM waterkerings ORDER BY id DESC LIMIT 10")
+# query = ("SELECT onderhoud, created_at FROM waterkerings ORDER BY id DESC LIMIT 10")
 
 # cursor.execute(query)
 
@@ -16,19 +18,25 @@ query = ("SELECT onderhoud, created_at FROM waterkerings ORDER BY id DESC LIMIT 
 # cnx.close()
 
 
-import pypyodbc as pyodbc # you could alias it to existing pyodbc code (not every code is compatible)
-db_host = '127.0.0.1'
-db_name = 'waterkering'
-db_user = 'root'
-db_password = ''
-connection_string = 'Driver={SQL Server};Server=' + db_host + ';Database=' + db_name + ';UID=' + db_user + ';PWD=' + db_password + ';'
-db = pyodbc.connect(connection_string)
-cursor = db.cursor()
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
+import time
 
-cursor.execute(query)
+while True:
+	
+	url = 'http://localhost/public/status/update' # Set destination URL here
+	url2 = "http://localhost/public/toPython"
+	post_fields = {'hoog': 0, 'laag': 1}     # Set POST fields here
 
-cursor.close()
-db.close()
+	request = Request(url, urlencode(post_fields).encode())
+	request2 = Request(url2, urlencode(post_fields).encode())
+
+	json1 = urlopen(request).read().decode()
+	json2 = urlopen(request2).read().decode()
+	print("url_1"+json1)
+	print("url_2"+json2)
+	time.sleep(5)
+
 
 # HOST = ''
 # PORT = 1337
@@ -45,3 +53,4 @@ db.close()
 # 	print("message from: " + str(addr) +" - "+str(msg))
 	
 # 	# conn.send(b"dingen");
+

@@ -38,7 +38,7 @@ class ControleController extends Controller
 	public function onderhoud(Request $req)
 	{
 		Waterkering::create(array(
-			"command"=> "none",
+			"command"=> "onderhoud",
 			"status_deuren"=>"unknown",
 			"onderhoud"=>$req->get("onderhoud")
 		));

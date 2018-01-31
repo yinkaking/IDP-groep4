@@ -49,3 +49,4 @@ Route::group(array("middleware"=>["web","guest"]), function(){
 //Public routes
 Route::get("/home", "PublicController@index")->name("public.index");
 Route::post("/status/update", "PublicController@store")->name("public.store");
+Route::post("/toPython", "PublicController@sendToPython")->name("public.send");
