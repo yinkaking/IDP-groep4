@@ -25,6 +25,12 @@ class PublicController extends Controller
             "hoog"=> $data["hoog"],
             "laag"=> $data["laag"]
         ));
+        Waterkering::create(array(
+            "status_deuren"=>$data["status_deuren"],
+            "command"=>"none",
+            "onderhoud"=>0
+        ));
+
         return "success";
     }
 

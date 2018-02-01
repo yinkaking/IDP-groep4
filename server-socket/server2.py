@@ -1,56 +1,43 @@
 import socket
-
-# import mysql.connector
-
-# cnx = mysql.connector.connect(user='root', password='', host='127.0.0.1', database='waterkering')
-
-# cursor = cnx.cursor()
-
-# query = ("SELECT onderhoud, created_at FROM waterkerings ORDER BY id DESC LIMIT 10")
-
-# cursor.execute(query)
-
-# for (onderhoud, created_at) in cursor:
-#     print("{}, {} ".format(onderhoud, created_at))
-
-# cursor.close()
-
-# cnx.close()
-
-
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 import time
+import pickle
+import socketserver
 
-while True:
-	
-	url = 'http://localhost/public/status/update' # Set destination URL here
-	url2 = "http://localhost/public/toPython"
-	post_fields = {'hoog': 0, 'laag': 1}     # Set POST fields here
+HOST = ''
+PORT = 1337
+url = 'http://localhost/public/status/update' # Set destination URL here
+url2 = "http://localhost/public/toPython"
 
-	request = Request(url, urlencode(post_fields).encode())
-	request2 = Request(url2, urlencode(post_fields).encode())
-
-	json1 = urlopen(request).read().decode()
+def requestData():
+	request2 = Request(url2, urlencode({}).encode())
 	json2 = urlopen(request2).read().decode()
-	print("url_1"+json1)
-	print("url_2"+json2)
-	time.sleep(5)
+	return json2
+
+def sendData(toSend):
+	request = Request(url, urlencode(post_fields).encode())
+	json1 = urlopen(request).read().decode()
+	return json1
 
 
-# HOST = ''
-# PORT = 1337
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((HOST, PORT))
+s.listen(10)
 
-# s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# s.bind((HOST, PORT))
-# s.listen(10)
-# conn, addr = s.accept()
+conn, addr = s.accept()
+print('Connection address:', addr)
 
-# print('Connection address:', addr)
+msg = conn.recv(1024)
+while len(msg) > 0:
+	#request info on website
+	doorInfo = requestData();
+	conn.send(pickle.dumps(doorInfo, protocol=2));
 
-# msg = conn.recv(1024)
-# while msg != '':
-# 	print("message from: " + str(addr) +" - "+str(msg))
-	
-# 	# conn.send(b"dingen");
+	data = pickle.loads(msg)
 
+	post_fields = {'hoog': data['hoog'], 'laag': data['laag'], "status_deuren": data["status_deuren"]}
+	sendData(post_fields)
+	time.sleep(2)
+
+print("quit")

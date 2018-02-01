@@ -12,7 +12,8 @@ class ControleController extends Controller
 	public function index()
 	{
 		$view = view("admin.control.index");
-		$view->onderhoud = Waterkering::orderBy("id", "DESC")->first()->onderhoud;
+		$view->onderhoud = Waterkering::where("command", "onderhoud")->orderBy("id", "DESC")->first()->onderhoud;
+		$view->command = Waterkering::where("command", "open")->orWhere("command", "close")->orderBy("id", "DESC")->first()->command;
 		return $view;
 	}
 

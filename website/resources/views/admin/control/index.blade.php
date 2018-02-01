@@ -13,7 +13,7 @@
 				<td><h4>Deuren sluiten</h4></td>
 				<td>
 					<label class="switch">
-						<input type="checkbox" onchange="updateDb(this.checked)">
+						<input type="checkbox" onchange="updateDb(this.checked)" @if($command == "open") checked="checked"@endif>
 						<span class="slider"></span>
 					</label>
 				</td>
