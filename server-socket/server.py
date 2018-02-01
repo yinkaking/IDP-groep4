@@ -3,7 +3,6 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 import time
 import pickle
-import socketserver
 
 HOST = ''
 PORT = 1337
@@ -35,6 +34,7 @@ while len(msg) > 0:
 	conn.send(pickle.dumps(doorInfo, protocol=2));
 
 	data = pickle.loads(msg)
+	print("received: "+ str(data))
 
 	post_fields = {'hoog': data['hoog'], 'laag': data['laag'], "status_deuren": data["status_deuren"]}
 	sendData(post_fields)
