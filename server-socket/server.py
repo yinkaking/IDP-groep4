@@ -1,23 +1,43 @@
 import socket
-import sys
-import pickle
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 import time
+import pickle
+import socketserver
 
-# Create a TCP/IP socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+HOST = ''
+PORT = 1337
+url = 'http://localhost/public/status/update' # Set destination URL here
+url2 = "http://localhost/public/toPython"
 
-# Connect the socket to the port where the server is listening
-server_address = ('localhost', 1337)
-print(sys.stderr, 'connecting to %s port %s' % server_address)
-sock.connect(server_address)
+def requestData():
+	request2 = Request(url2, urlencode({}).encode())
+	json2 = urlopen(request2).read().decode()
+	return json2
 
-while True:
-    # Send data
-    message = {"hoog":0, "laag":1, "status_deuren":"open"}
-    print('sending "%s"' % message)
-    sock.sendall(pickle.dumps(message))
-    print("sent")
-    data = sock.recv(1024)
-    
-    print(pickle.loads(data))
-    time.sleep(2)
+def sendData(toSend):
+	request = Request(url, urlencode(post_fields).encode())
+	json1 = urlopen(request).read().decode()
+	return json1
+
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((HOST, PORT))
+s.listen(10)
+
+conn, addr = s.accept()
+print('Connection address:', addr)
+
+msg = conn.recv(1024)
+while len(msg) > 0:
+	#request info on website
+	doorInfo = requestData();
+	conn.send(pickle.dumps(doorInfo, protocol=2));
+
+	data = pickle.loads(msg)
+
+	post_fields = {'hoog': data['hoog'], 'laag': data['laag'], "status_deuren": data["status_deuren"]}
+	sendData(post_fields)
+	time.sleep(2)
+
+print("quit")
