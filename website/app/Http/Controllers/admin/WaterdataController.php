@@ -11,7 +11,7 @@ class WaterdataController extends Controller
 	public function index()
 	{
 		$view = view("admin.waterdata.index");
-		$view->waterdatas = Waterdata::all();
+		$view->waterdatas = Waterdata::orderBy("id", "DESC")->get()->take(40);
 		return $view;
 	}
 }

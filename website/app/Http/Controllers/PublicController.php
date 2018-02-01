@@ -14,7 +14,7 @@ class PublicController extends Controller
     {
         // factory(\App\Waterdata::class, 30)->create();
         $view = view("public.index");
-        $view->waters = \App\Waterdata::all();
+        $view->waters = Waterdata::orderBy("id", "DESC")->get()->take(20);
         return $view;
     }
 

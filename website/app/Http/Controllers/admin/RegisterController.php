@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -13,9 +14,6 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        // if(!auth()->user->isAdmin){
-        //     return Redirect::namedRoute();
-        // }
     }
 
     public function index()
@@ -27,11 +25,13 @@ class RegisterController extends Controller
 
     public function create()
     {
+        Self::isAuthorized();
         return view('admin.user.create');
     }
 
     public function store(Request $req)
     { 
+        Self::isAuthorized();
         $data = $req->all();
         if($data["password"] != $data["repeat_password"]){
             return back()->with("error", "De wachtwoorden zijn niet hetzelfde");
@@ -45,8 +45,15 @@ class RegisterController extends Controller
 
     public function destroy($id)
     {
+        Self::isAuthorized();
         $user = User::find($id);
         $user->delete();
         return redirect()->route("user.index")->with("message", "Succesvol gebruiker verwijderd");
+    }
+    public static function isAuthorized()
+    {
+        if(!Auth::user()->isAdmin){
+            return Redirect::namedRoute("home");
+        }
     }
 }

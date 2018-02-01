@@ -20,7 +20,7 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers{
-        logout as performLogout;
+        // logout as performLogout;
     }
 
     /**
@@ -37,14 +37,14 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest');
     }
 
-    public function logout(Request $request)
-    {
-        dd("huh");
-        $this->performGetLogout($request);
-        $this->performLogout($request);
-        return redirect('/');
-    }
+    // public function logout(Request $request)
+    // {
+    //     // dd("huh");
+    //     $this->performGetLogout($request);
+    //     $this->performLogout($request);
+    //     return redirect('/');
+    // }
 }
